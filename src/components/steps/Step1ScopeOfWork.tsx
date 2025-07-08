@@ -32,7 +32,7 @@ const Step1ScopeOfWork: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-3">
           Step 1 (of 9) - Scope of Work
@@ -46,8 +46,9 @@ const Step1ScopeOfWork: React.FC = () => {
         <h3 className="text-xl font-semibold text-gray-900 mb-6">
           Select Your Scope of Work
         </h3>
-        
-        <div className="grid gap-4">
+
+        {/* 🟦 Service Options in One Row */}
+        <div className="grid gap-4 md:grid-cols-3">
           {serviceOptions.map((option) => (
             <div
               key={option.id}
@@ -59,9 +60,7 @@ const Step1ScopeOfWork: React.FC = () => {
               }`}
             >
               <div className="flex items-center space-x-3">
-                <div className="flex-shrink-0">
-                  {option.icon}
-                </div>
+                <div className="flex-shrink-0">{option.icon}</div>
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 mb-1">
                     {option.title}
@@ -83,9 +82,7 @@ const Step1ScopeOfWork: React.FC = () => {
         </h3>
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-              ✂️ Fabrication
-            </h4>
+            <h4 className="font-medium text-gray-900 mb-2 flex items-center">✂️ Fabrication</h4>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• Precision cutting & shaping</li>
               <li>• Edge polishing & finishing</li>
@@ -93,9 +90,7 @@ const Step1ScopeOfWork: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-              🚚 Delivery
-            </h4>
+            <h4 className="font-medium text-gray-900 mb-2 flex items-center">🚚 Delivery</h4>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• Safe packaging & transport</li>
               <li>• UAE-wide delivery coverage</li>
@@ -103,9 +98,7 @@ const Step1ScopeOfWork: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-              🔧 Installation
-            </h4>
+            <h4 className="font-medium text-gray-900 mb-2 flex items-center">🔧 Installation</h4>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• Professional installation team</li>
               <li>• Site preparation & cleanup</li>
@@ -115,9 +108,7 @@ const Step1ScopeOfWork: React.FC = () => {
         </div>
       </div>
 
-      <NavigationButtons
-        isNextDisabled={!data.serviceLevel}
-      />
+      <NavigationButtons isNextDisabled={!data.serviceLevel} />
     </div>
   );
 };
