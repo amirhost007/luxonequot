@@ -69,7 +69,8 @@ const Step2MaterialOptions: React.FC = () => {
             Select Material Source
           </h3>
           
-          <div className="grid gap-3">
+         <div className="grid gap-3 md:grid-cols-3">
+
             {/* By Luxone Own Material */}
             <div
               onClick={() => handleMaterialSourceChange('luxone')}
