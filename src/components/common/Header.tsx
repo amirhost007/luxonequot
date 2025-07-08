@@ -15,7 +15,7 @@ const Header: React.FC = () => {
          <div className="flex items-center space-x-3">
   <div className="w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center shadow">
     <img
-              src="/src/logo.png"
+              src="https://demo.theluxone.com/wp-content/uploads/2025/07/Luxone-In-High-Quality-1.png"
               alt="Luxone Logo"
               className="w-full h-full object-contain"
             />
