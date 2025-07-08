@@ -43,7 +43,7 @@ const Step6Timeline: React.FC = () => {
       </div>
 
       <div className="space-y-4 mb-8">
-        <div className="grid gap-3">
+<div className="grid gap-3 md:grid-cols-3">
           {timelineOptions.map((option) => (
             <div
               key={option.id}
