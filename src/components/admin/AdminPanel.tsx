@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
+import FormFieldManager from './FormFieldManager';
+import PDFTemplateManager from './PDFTemplateManager';
 import { 
   Settings, 
   Users, 
@@ -14,7 +16,11 @@ import {
   Trash2,
   Download,
   MessageCircle,
-  ArrowLeft
+  ArrowLeft,
+  FormInput,
+  Palette,
+  Database,
+  BarChart3
 } from 'lucide-react';
 
 const AdminPanel: React.FC = () => {
@@ -34,10 +40,37 @@ const AdminPanel: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'quotes', label: 'Quotes', icon: FileText },
-    { id: 'analytics', label: 'Analytics', icon: Users }
+    { id: 'settings', label: 'Company Settings', icon: Settings },
+    { id: 'form-fields', label: 'Form Fields', icon: FormInput },
+    { id: 'pdf-templates', label: 'PDF Templates', icon: Palette },
+    { id: 'quotes', label: 'Quote Requests', icon: FileText },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'database', label: 'Data Export', icon: Database }
   ];
+
+  const exportQuotesData = () => {
+    const dataStr = JSON.stringify(quotes, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `luxone_quotes_${new Date().toISOString().slice(0, 10)}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const exportSettingsData = () => {
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `luxone_settings_${new Date().toISOString().slice(0, 10)}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,13 +87,13 @@ const AdminPanel: React.FC = () => {
                 <span>Back to Quotation</span>
               </button>
               <div className="h-6 w-px bg-gray-300"></div>
-              <h1 className="text-2xl font-bold text-gray-900">Admin Panel</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Luxone Admin Panel</h1>
             </div>
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">L</span>
               </div>
-              <span className="text-sm text-gray-600">Luxone Admin</span>
+              <span className="text-sm text-gray-600">Admin Dashboard</span>
             </div>
           </div>
         </div>
@@ -99,7 +132,7 @@ const AdminPanel: React.FC = () => {
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">System Settings</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Company Settings</h2>
                     {!editingSettings ? (
                       <button
                         onClick={() => setEditingSettings(true)}
@@ -318,12 +351,31 @@ const AdminPanel: React.FC = () => {
               </div>
             )}
 
+            {activeTab === 'form-fields' && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <FormFieldManager />
+              </div>
+            )}
+
+            {activeTab === 'pdf-templates' && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <PDFTemplateManager />
+              </div>
+            )}
+
             {activeTab === 'quotes' && (
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900">Quote Requests</h2>
                     <div className="flex items-center space-x-4">
+                      <button
+                        onClick={exportQuotesData}
+                        className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                      >
+                        <Download size={16} />
+                        <span>Export Data</span>
+                      </button>
                       <span className="text-sm text-gray-600">
                         Total Quotes: {quotes.length}
                       </span>
@@ -410,10 +462,10 @@ const AdminPanel: React.FC = () => {
                   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">Avg. Quote Value</p>
-                        <p className="text-2xl font-bold text-gray-900">AED 8,500</p>
+                        <p className="text-sm text-gray-600">Form Fields</p>
+                        <p className="text-2xl font-bold text-gray-900">{settings.formFields.length}</p>
                       </div>
-                      <DollarSign size={32} className="text-purple-600" />
+                      <FormInput size={32} className="text-purple-600" />
                     </div>
                   </div>
                 </div>
@@ -435,6 +487,58 @@ const AdminPanel: React.FC = () => {
                         <span className="text-sm text-gray-500">{quote.id}</span>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'database' && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-6">Data Management</h2>
+                  
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="border border-gray-200 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Export Data</h3>
+                      <div className="space-y-3">
+                        <button
+                          onClick={exportQuotesData}
+                          className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                        >
+                          <Download size={16} />
+                          <span>Export Quotes Data</span>
+                        </button>
+                        <button
+                          onClick={exportSettingsData}
+                          className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
+                        >
+                          <Download size={16} />
+                          <span>Export Settings Data</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="border border-gray-200 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Database Statistics</h3>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Total Quotes:</span>
+                          <span className="font-medium">{quotes.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Form Fields:</span>
+                          <span className="font-medium">{settings.formFields.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">PDF Templates:</span>
+                          <span className="font-medium">{settings.pdfTemplates.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Active Template:</span>
+                          <span className="font-medium">{settings.activePdfTemplate}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

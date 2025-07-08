@@ -27,14 +27,14 @@ const Header: React.FC = () => {
 </div>
 
           <div className="flex items-center space-x-4">
-            {/* <button
+            <button
               onClick={() => setIsAdminMode(true)}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
               title="Admin Panel"
             >
               <Settings size={20} />
               <span className="text-sm">Admin</span>
-            </button> */}
+            </button>
             <div className="text-right">
               <div className="text-sm text-gray-500 mb-1">
                 Step {currentStep} of {totalSteps}
