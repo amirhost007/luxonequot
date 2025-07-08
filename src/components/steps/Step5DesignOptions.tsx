@@ -17,7 +17,7 @@ const Step5DesignOptions: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {/* Custom Edge */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
