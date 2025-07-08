@@ -74,7 +74,8 @@ const Step3WorktopLayout: React.FC = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="md:col-span-2 lg:col-span-3">
-          <div className="grid gap-3">
+          <div className="grid gap-3 md:grid-cols-3">
+
             {layoutOptions.map((option) => (
               <div
                 key={option.id}
