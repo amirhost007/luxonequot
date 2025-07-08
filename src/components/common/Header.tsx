@@ -1,12 +1,14 @@
 import React from 'react';
 import { useQuotation } from '../../context/QuotationContext';
-import { useAdmin } from '../../context/AdminContext';
 import { Settings } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { currentStep, totalSteps } = useQuotation();
-  const { setIsAdminMode } = useAdmin();
   const progressPercentage = (currentStep / totalSteps) * 100;
+
+  const handleAdminAccess = () => {
+    window.open('/admin', '_blank');
+  };
 
   return (
     <div className="bg-white shadow-sm border-b border-gray-200">
@@ -28,7 +30,7 @@ const Header: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => setIsAdminMode(true)}
+              onClick={handleAdminAccess}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
               title="Admin Panel"
             >

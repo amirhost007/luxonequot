@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../context/AdminContext';
 import FormFieldManager from './FormFieldManager';
 import PDFTemplateManager from './PDFTemplateManager';
@@ -20,11 +21,13 @@ import {
   FormInput,
   Palette,
   Database,
-  BarChart3
+  BarChart3,
+  LogOut
 } from 'lucide-react';
 
 const AdminPanel: React.FC = () => {
   const { settings, updateSettings, quotes, setIsAdminMode } = useAdmin();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('settings');
   const [editingSettings, setEditingSettings] = useState(false);
   const [tempSettings, setTempSettings] = useState(settings);
@@ -72,6 +75,11 @@ const AdminPanel: React.FC = () => {
     linkElement.click();
   };
 
+  const handleLogout = () => {
+    setIsAdminMode(false);
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -79,21 +87,27 @@ const AdminPanel: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">L</span>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">Luxone Admin Panel</h1>
+            </div>
+            <div className="flex items-center space-x-3">
               <button
-                onClick={() => setIsAdminMode(false)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <ArrowLeft size={20} />
                 <span>Back to Quotation</span>
               </button>
               <div className="h-6 w-px bg-gray-300"></div>
-              <h1 className="text-2xl font-bold text-gray-900">Luxone Admin Panel</h1>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">L</span>
-              </div>
-              <span className="text-sm text-gray-600">Admin Dashboard</span>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
         </div>
