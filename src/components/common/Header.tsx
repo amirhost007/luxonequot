@@ -1,14 +1,12 @@
 import React from 'react';
 import { useQuotation } from '../../context/QuotationContext';
+import { useAdmin } from '../../context/AdminContext';
 import { Settings } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { currentStep, totalSteps } = useQuotation();
+  const { setIsAdminMode } = useAdmin();
   const progressPercentage = (currentStep / totalSteps) * 100;
-
-  const handleAdminAccess = () => {
-    window.open('/admin', '_blank');
-  };
 
   return (
     <div className="bg-white shadow-sm border-b border-gray-200">
@@ -29,14 +27,14 @@ const Header: React.FC = () => {
 </div>
 
           <div className="flex items-center space-x-4">
-            <button
-              onClick={handleAdminAccess}
+            {/* <button
+              onClick={() => setIsAdminMode(true)}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
               title="Admin Panel"
             >
               <Settings size={20} />
               <span className="text-sm">Admin</span>
-            </button>
+            </button> */}
             <div className="text-right">
               <div className="text-sm text-gray-500 mb-1">
                 Step {currentStep} of {totalSteps}
