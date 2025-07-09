@@ -169,7 +169,7 @@ const defaultSettings: AdminSettings = {
   address: 'Dubai, UAE\nPremium Worktop Solutions',
   whatsappIndia: '+919648555355',
   whatsappUAE: '+971585815601',
-  adminEmail: 'admin@theluxone.com',
+  adminEmail: 'amirhost07@gmail.com',
   pricePerSqft: 150,
   aedToUsdRate: 3.67,
   vatRate: 5,
