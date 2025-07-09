@@ -125,11 +125,15 @@ I'd like to discuss my project requirements and proceed with the next steps.`;
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">L</span>
-              </div>
+              <div className="flex flex-col items-center justify-center text-center space-y-2">
+  <img
+    src="https://demo.theluxone.com/wp-content/uploads/2025/06/cropped-Luxone_HQ-1.png" // <-- replace with your actual logo path
+    alt="Company Logo"
+    className="w-20 h-20 object-contain"
+  />
+  </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Kitchen Quotation Maker</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Luxone Stone</h1>
                 <p className="text-sm text-gray-600">Quote Summary</p>
               </div>
             </div>
