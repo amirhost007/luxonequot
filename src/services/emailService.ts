@@ -75,7 +75,8 @@ export const sendAdminNotification = async (quoteData: any, quoteId: string, set
 export const sendCustomerQuote = async (quoteData: any, quoteId: string, settings: any): Promise<boolean> => {
   try {
     if (!quoteData.email) {
-      throw new Error('Customer email is required');
+      console.error('❌ Customer email is missing from quote data');
+      throw new Error('Customer email is required to send quote');
     }
 
     const emailData: EmailData = {
@@ -104,7 +105,32 @@ export const sendCustomerQuote = async (quoteData: any, quoteId: string, setting
     console.log('Customer quote sent successfully:', response);
     return true;
   } catch (error) {
-    console.error('Failed to send customer quote:', error);
+    console.error('❌ Failed to send customer quote:', error);
+    
+    // Provide specific guidance for common EmailJS errors
+    if (error && typeof error === 'object' && 'status' in error) {
+      const emailError = error as { status: number; text: string };
+      
+      if (emailError.status === 422 && emailError.text?.includes('recipients address is empty')) {
+        console.error(`
+🔧 CONFIGURATION ERROR: EmailJS Template Not Configured Properly
+
+The error indicates your EmailJS template is missing the recipient configuration.
+
+TO FIX THIS:
+1. Go to your EmailJS dashboard (https://dashboard.emailjs.com/)
+2. Navigate to "Email Templates"
+3. Find your customer template (ID: ${EMAILJS_TEMPLATE_ID_CUSTOMER})
+4. In the template settings, set the "To Email" field to: {{to_email}}
+5. Save the template
+
+This tells EmailJS to use the email address provided by the application.
+        `);
+        throw new Error('EmailJS template configuration error: Please set "To Email" field to {{to_email}} in your customer template');
+      }
+    }
+    
+    throw error;
     return false;
   }
 };

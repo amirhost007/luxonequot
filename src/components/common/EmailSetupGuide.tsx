@@ -133,7 +133,8 @@ www.theluxone.com
             <p className="text-blue-800 text-sm">
               💡 In EmailJS dashboard, go to "Email Templates" → "Create New Template" and paste these templates.
               Make sure to copy the Template IDs after creating them.<br/>
-              <strong>IMPORTANT:</strong> In your EmailJS template settings, make sure the "To Email" field is set to <code>{"{{to_email}}"}</code>
+              <strong>⚠️ CRITICAL:</strong> In your EmailJS template settings, you MUST set the "To Email" field to <code>{"{{to_email}}"}</code> for both templates.
+              <br/>Without this configuration, you will get a "recipients address is empty" error.
             </p>
           </div>
         </div>
@@ -157,7 +158,8 @@ www.theluxone.com
               <br />• Service ID: In "Email Services"
               <br />• Template IDs: In "Email Templates"
               <br />• Public Key: In "Account" → "General"
-              <br />• <strong>Template Setup:</strong> Set "To Email" field to <code>{"{{to_email}}"}</code> in both templates
+              <br />• <strong>⚠️ CRITICAL STEP:</strong> Set "To Email" field to <code>{"{{to_email}}"}</code> in BOTH templates
+              <br />• <strong>Common Error:</strong> If you get "recipients address is empty", the "To Email" field is not configured
             </p>
           </div>
         </div>
@@ -279,6 +281,7 @@ www.theluxone.com
               <li>• {{customer_email}} - Customer email</li>
               <li>• {{total_amount}} - Quote total</li>
               <li>• {{message}} - Email content</li>
+              <li>• <strong>{{to_email}} - REQUIRED in "To Email" field</strong></li>
             </ul>
           </div>
           <div>
@@ -290,6 +293,17 @@ www.theluxone.com
               <li>• Error handling built-in</li>
             </ul>
           </div>
+        </div>
+        
+        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <h4 className="font-semibold text-red-900 mb-2 flex items-center">
+            <AlertCircle size={16} className="mr-2" />
+            Common Configuration Error
+          </h4>
+          <p className="text-red-800 text-sm">
+            <strong>Error:</strong> "recipients address is empty"<br/>
+            <strong>Solution:</strong> In EmailJS dashboard, edit both templates and set the "To Email" field to <code>{"{{to_email}}"}</code>
+          </p>
         </div>
       </div>
     </div>
