@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../context/AdminContext';
 import FormFieldManager from './FormFieldManager';
 import PDFTemplateManager from './PDFTemplateManager';
+import EmailSetupGuide from '../common/EmailSetupGuide';
 import { 
   Settings, 
   Users, 
@@ -22,7 +23,8 @@ import {
   Palette,
   Database,
   BarChart3,
-  LogOut
+  LogOut,
+  Zap
 } from 'lucide-react';
 
 const AdminPanel: React.FC = () => {
@@ -46,6 +48,7 @@ const AdminPanel: React.FC = () => {
     { id: 'settings', label: 'Company Settings', icon: Settings },
     { id: 'form-fields', label: 'Form Fields', icon: FormInput },
     { id: 'pdf-templates', label: 'PDF Templates', icon: Palette },
+    { id: 'email-setup', label: 'Email Setup', icon: Zap },
     { id: 'quotes', label: 'Quote Requests', icon: FileText },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'database', label: 'Data Export', icon: Database }
@@ -377,6 +380,11 @@ const AdminPanel: React.FC = () => {
               </div>
             )}
 
+            {activeTab === 'email-setup' && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <EmailSetupGuide />
+              </div>
+            )}
             {activeTab === 'quotes' && (
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

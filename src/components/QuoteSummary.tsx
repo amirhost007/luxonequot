@@ -4,6 +4,7 @@ import { useAdmin } from '../context/AdminContext';
 import { generateQuotePDF } from '../utils/pdfGenerator';
 import { sendWhatsAppMessage } from '../utils/whatsappService';
 import { calculatePricing } from '../utils/pricingCalculator';
+import { sendCustomerQuote } from '../services/emailService';
 import { 
   CheckCircle, 
   Download, 
@@ -22,6 +23,8 @@ const QuoteSummary: React.FC = () => {
   const { data, quoteId, resetQuotation } = useQuotation();
   const { settings } = useAdmin();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleDownloadPDF = async () => {
     setIsGeneratingPDF(true);
@@ -52,6 +55,32 @@ I'd like to discuss my project requirements and proceed with the next steps.`;
     sendWhatsAppMessage(phoneNumber, message);
   };
 
+  const handleEmailQuote = async () => {
+    if (!data.email) {
+      alert('Email address is required to send the quote. Please contact us directly.');
+      return;
+    }
+
+    setIsSendingEmail(true);
+    setEmailStatus('idle');
+
+    try {
+      const emailSent = await sendCustomerQuote(data, quoteId, settings);
+      if (emailSent) {
+        setEmailStatus('success');
+        alert('Quote has been sent to your email address successfully!');
+      } else {
+        setEmailStatus('error');
+        alert('Failed to send email. Please try again or contact us directly.');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setEmailStatus('error');
+      alert('Failed to send email. Please try again or contact us directly.');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
   const getServiceLevelText = (level: string) => {
     switch (level) {
       case 'fabrication': return 'Fabrication Only';
@@ -276,10 +305,39 @@ I'd like to discuss my project requirements and proceed with the next steps.`;
                   <span>{isGeneratingPDF ? 'Generating...' : 'Download Quote PDF'}</span>
                 </button>
                 
-                <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
+                <button 
+                  onClick={handleEmailQuote}
+                  disabled={isSendingEmail || !data.email}
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
+                    !data.email 
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                      : emailStatus === 'success'
+                      ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                      : emailStatus === 'error'
+                      ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
                   <Mail size={20} />
-                  <span>Email Quote</span>
+                  <span>
+                    {isSendingEmail 
+                      ? 'Sending...' 
+                      : emailStatus === 'success'
+                      ? 'Email Sent ✓'
+                      : emailStatus === 'error'
+                      ? 'Failed - Retry'
+                      : !data.email
+                      ? 'Email Required'
+                      : 'Email Quote'
+                    }
+                  </span>
                 </button>
+                
+                {!data.email && (
+                  <p className="text-sm text-gray-500 text-center">
+                    Email address is required to send quotes electronically
+                  </p>
+                )}
               </div>
             </div>
 
@@ -319,10 +377,11 @@ I'd like to discuss my project requirements and proceed with the next steps.`;
                 📧 Email Notifications Sent
               </h3>
               <ul className="space-y-2 text-sm text-blue-800">
-                <li>• A detailed quotation has been sent to your email: {data.name}@gmail.com</li>
+                <li>• A detailed quotation confirmation has been sent to: {data.email || 'Email not provided'}</li>
                 <li>• Our admin team has been notified of your request</li>
                 <li>• You will receive a confirmation call within 24 hours</li>
-                <li>• Check your spam folder if you don't see the email</li>
+                {data.email && <li>• Check your spam folder if you don't see the email</li>}
+                {!data.email && <li>• Use the "Email Quote" button above to receive your quote via email</li>}
               </ul>
             </div>
 

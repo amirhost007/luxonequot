@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { QuotationData, QuotationContextType } from '../types';
 import { useAdmin } from './AdminContext';
+import { sendAdminNotification } from '../services/emailService';
 
 const initialData: QuotationData = {
   serviceLevel: '',
@@ -36,7 +37,7 @@ export const QuotationProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [isQuoteSubmitted, setIsQuoteSubmitted] = useState(false);
   const [quoteId, setQuoteId] = useState('');
   const totalSteps = 9;
-  const { addQuote } = useAdmin();
+  const { addQuote, settings } = useAdmin();
 
   const updateData = (updates: Partial<QuotationData>) => {
     setData(prev => ({ ...prev, ...updates }));
@@ -48,7 +49,7 @@ export const QuotationProvider: React.FC<{ children: ReactNode }> = ({ children 
     return `LUX-${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${random}`.toUpperCase();
   };
 
-  const submitQuote = () => {
+  const submitQuote = async () => {
     const newQuoteId = generateQuoteId();
     setQuoteId(newQuoteId);
     setIsQuoteSubmitted(true);
@@ -59,6 +60,18 @@ export const QuotationProvider: React.FC<{ children: ReactNode }> = ({ children 
       data: data,
       createdAt: new Date().toISOString()
     });
+
+    // Send automated email notification to admin
+    try {
+      const emailSent = await sendAdminNotification(data, newQuoteId, settings);
+      if (emailSent) {
+        console.log('Admin notification email sent successfully');
+      } else {
+        console.warn('Failed to send admin notification email');
+      }
+    } catch (error) {
+      console.error('Error sending admin notification:', error);
+    }
   };
 
   const resetQuotation = () => {
