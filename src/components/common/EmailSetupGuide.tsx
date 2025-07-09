@@ -157,7 +157,7 @@ www.theluxone.com
               <br />• Service ID: In "Email Services"
               <br />• Template IDs: In "Email Templates"
               <br />• Public Key: In "Account" → "General"
-              <br />• <strong>Template Setup:</strong> Set "To Email" field to <code>{{`{{to_email}}`}}</code> in both templates
+              <br />• <strong>Template Setup:</strong> Set "To Email" field to <code>{"{{to_email}}"}</code> in both templates
             </p>
           </div>
         </div>
