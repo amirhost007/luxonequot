@@ -29,8 +29,17 @@ export interface EmailData {
 
 export const sendAdminNotification = async (quoteData: any, quoteId: string, settings: any): Promise<boolean> => {
   try {
+    // Get admin email from settings or use default
+    const adminEmail = settings?.adminEmail || 'admin@theluxone.com';
+    
+    // Validate admin email exists
+    if (!adminEmail || adminEmail.trim() === '') {
+      console.error('Admin email is not configured');
+      return false;
+    }
+
     const emailData: EmailData = {
-      to_email: settings.adminEmail || 'admin@theluxone.com',
+      to_email: adminEmail,
       to_name: 'Luxone Admin',
       from_name: 'Luxone Quotation System',
       subject: `New Quote Request - ${quoteId}`,
@@ -45,6 +54,9 @@ export const sendAdminNotification = async (quoteData: any, quoteId: string, set
       total_amount: calculateTotalAmount(quoteData, settings),
       quote_details: generateQuoteDetailsText(quoteData)
     };
+
+    console.log('Sending admin notification to:', adminEmail);
+    console.log('Email data:', emailData);
 
     const response = await emailjs.send(
       EMAILJS_SERVICE_ID,

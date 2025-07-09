@@ -62,14 +62,16 @@ function App() {
   return (
     <Router>
       <AdminProvider>
-        <QuotationProvider>
-          <Routes>
-            <Route path="/" element={<AppContent />} />
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminPanel />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </QuotationProvider>
+        <Routes>
+          <Route path="/" element={
+            <QuotationProvider>
+              <AppContent />
+            </QuotationProvider>
+          } />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminPanel />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </AdminProvider>
     </Router>
   );

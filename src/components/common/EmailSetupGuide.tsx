@@ -12,7 +12,7 @@ const EmailSetupGuide: React.FC = () => {
   };
 
   const adminTemplate = `
-Subject: New Quote Request - {{quote_id}}
+Subject: New Quote Request - {{quote_id}} 
 
 🔔 NEW QUOTATION REQUEST RECEIVED
 
@@ -132,7 +132,8 @@ www.theluxone.com
           <div className="bg-blue-50 p-4 rounded-lg">
             <p className="text-blue-800 text-sm">
               💡 In EmailJS dashboard, go to "Email Templates" → "Create New Template" and paste these templates.
-              Make sure to copy the Template IDs after creating them.
+              Make sure to copy the Template IDs after creating them.<br/>
+              <strong>IMPORTANT:</strong> In your EmailJS template settings, make sure the "To Email" field is set to <code>{{`{{to_email}}`}}</code>
             </p>
           </div>
         </div>
@@ -156,6 +157,7 @@ www.theluxone.com
               <br />• Service ID: In "Email Services"
               <br />• Template IDs: In "Email Templates"
               <br />• Public Key: In "Account" → "General"
+              <br />• <strong>Template Setup:</strong> Set "To Email" field to <code>{{`{{to_email}}`}}</code> in both templates
             </p>
           </div>
         </div>
