@@ -1,7 +1,7 @@
 import emailjs from 'emailjs-com';
 
 // EmailJS configuration - you'll need to set these up in EmailJS dashboard
-const EMAILJS_SERVICE_ID = 'your_service_id'; // Gmail, Outlook, etc.
+const EMAILJS_SERVICE_ID = 'service_m3rmp0k'; // Gmail, Outlook, etc.
 const EMAILJS_TEMPLATE_ID_ADMIN = 'admin_notification_template';
 const EMAILJS_TEMPLATE_ID_CUSTOMER = 'customer_quote_template';
 const EMAILJS_PUBLIC_KEY = 'your_public_key';
