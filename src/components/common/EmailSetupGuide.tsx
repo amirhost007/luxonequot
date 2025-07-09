@@ -133,7 +133,7 @@ www.theluxone.com
             <p className="text-blue-800 text-sm">
               💡 In EmailJS dashboard, go to "Email Templates" → "Create New Template" and paste these templates.
               Make sure to copy the Template IDs after creating them.<br/>
-              <strong>IMPORTANT:</strong> In your EmailJS template settings, make sure the "To Email" field is set to <code>{{`{{to_email}}`}}</code>
+              <strong>IMPORTANT:</strong> In your EmailJS template settings, make sure the "To Email" field is set to <code>{"{{to_email}}"}</code>
             </p>
           </div>
         </div>
