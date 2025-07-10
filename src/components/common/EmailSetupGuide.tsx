@@ -5,59 +5,16 @@ const EmailSetupGuide: React.FC = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [copiedText, setCopiedText] = useState('');
 
-  const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedText(label);
-    setTimeout(() => setCopiedText(''), 2000);
+  const copyToClipboard = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(label);
+      setTimeout(() => setCopiedText(''), 2000);
+    } catch (err) {
+      console.error("Clipboard copy failed", err);
+    }
   };
 
-  const adminTemplate = `
-Subject: New Quote Request - {{quote_id}} 
-
-🔔 NEW QUOTATION REQUEST RECEIVED
-
-Quote ID: {{quote_id}}
-Date: {{date}}
-
-👤 CUSTOMER INFORMATION:
-• Name: {{customer_name}}
-• Email: {{customer_email}}
-• Phone: {{customer_phone}}
-• Location: {{customer_location}}
-
-🏗️ PROJECT DETAILS:
-• Service Level: {{service_level}}
-• Material: {{material_info}}
-• Total Amount: {{total_amount}} AED
-
-📝 MESSAGE:
-{{message}}
-
-⚡ ACTION REQUIRED:
-Please review this quotation request and follow up with the customer within 24 hours.
-
----
-Luxone Quotation System
-Automated Notification
-  `;
-
-  const customerTemplate = `
-Subject: Your Luxone Quotation - {{quote_id}}
-
-Dear {{customer_name}},
-
-Thank you for your interest in Luxone premium worktop solutions!
-
-📋 YOUR QUOTATION DETAILS:
-Quote ID: {{quote_id}}
-Estimated Investment: {{total_amount}} AED
-
-{{message}}
-
-Best regards,
-Luxone Team
-www.theluxone.com
-  `;
   const adminTemplate = `Subject: New Quote Request - {{quote_id}} 
 
 🔔 NEW QUOTATION REQUEST RECEIVED
@@ -175,9 +132,9 @@ www.theluxone.com`;
           <div className="bg-blue-50 p-4 rounded-lg">
             <p className="text-blue-800 text-sm">
               💡 In EmailJS dashboard, go to "Email Templates" → "Create New Template" and paste these templates.
-              Make sure to copy the Template IDs after creating them.<br/>
+              Make sure to copy the Template IDs after creating them.<br />
               <strong>⚠️ CRITICAL:</strong> In your EmailJS template settings, you MUST set the "To Email" field to <code>{"{{to_email}}"}</code> for both templates.
-              <br/>Without this configuration, you will get a "recipients address is empty" error.
+              <br />Without this configuration, you will get a "recipients address is empty" error.
             </p>
           </div>
         </div>
@@ -277,9 +234,7 @@ www.theluxone.com`;
           </div>
         </div>
 
-        <div className="mb-8">
-          {steps[activeStep - 1].content}
-        </div>
+        <div className="mb-8">{steps[activeStep - 1].content}</div>
 
         {/* Navigation */}
         <div className="flex justify-between">
@@ -294,7 +249,6 @@ www.theluxone.com`;
           >
             Previous
           </button>
-
           <button
             onClick={() => setActiveStep(Math.min(steps.length, activeStep + 1))}
             disabled={activeStep === steps.length}
@@ -337,14 +291,14 @@ www.theluxone.com`;
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <h4 className="font-semibold text-red-900 mb-2 flex items-center">
             <AlertCircle size={16} className="mr-2" />
             Common Configuration Error
           </h4>
           <p className="text-red-800 text-sm">
-            <strong>Error:</strong> "recipients address is empty"<br/>
+            <strong>Error:</strong> "recipients address is empty"<br />
             <strong>Solution:</strong> In EmailJS dashboard, edit both templates and set the "To Email" field to <code>{"{{to_email}}"}</code>
           </p>
         </div>
