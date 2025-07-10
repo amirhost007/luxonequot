@@ -49,18 +49,23 @@ export interface QuotationData {
   // Step 6: Timeline
   timeline: 'asap-2weeks' | '3-6weeks' | '6weeks-plus' | '';
   
-  // Step 7: Sink Options
+  // Step 5: Design Options (Sink)
   sinkOption: string;
   
-  // Step 8: Project Type
+  // Step 7: Project Type
   projectType: string;
   
-  // Step 9: Contact Information
+  // Step 8: Contact Information
   name: string;
   email?: string;
   contactNumber: string;
   location: 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Umm Al Quwain' | 'Ras Al Khaimah' | 'Fujairah' | '';
   additionalComments: string;
+  
+  // Designer Information
+  designerName?: string;
+  designerContact?: string;
+  designerEmail?: string;
 }
 
 export interface QuotationContextType {

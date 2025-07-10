@@ -4,6 +4,7 @@ import { useAdmin } from '../../context/AdminContext';
 import FormFieldManager from './FormFieldManager';
 import PDFTemplateManager from './PDFTemplateManager';
 import EmailSetupGuide from '../common/EmailSetupGuide';
+import CostManagement from './CostManagement';
 import { 
   Settings, 
   Users, 
@@ -46,6 +47,7 @@ const AdminPanel: React.FC = () => {
 
   const tabs = [
     { id: 'settings', label: 'Company Settings', icon: Settings },
+    { id: 'cost-management', label: 'Cost Management', icon: DollarSign },
     { id: 'form-fields', label: 'Form Fields', icon: FormInput },
     { id: 'pdf-templates', label: 'PDF Templates', icon: Palette },
     { id: 'email-setup', label: 'Email Setup', icon: Zap },
@@ -365,6 +367,12 @@ const AdminPanel: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'cost-management' && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <CostManagement />
               </div>
             )}
 

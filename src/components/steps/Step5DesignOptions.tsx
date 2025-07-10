@@ -1,166 +1,88 @@
 import React from 'react';
 import { useQuotation } from '../../context/QuotationContext';
 import NavigationButtons from '../common/NavigationButtons';
+import { User, Wrench } from 'lucide-react';
 
 const Step5DesignOptions: React.FC = () => {
   const { data, updateData } = useQuotation();
 
+  const sinkOptions = [
+    {
+      id: 'client-provided',
+      title: 'Sink provided by Client',
+      description: 'Client will supply their own sink',
+      icon: <User size={32} className="text-blue-600" />
+    },
+    {
+      id: 'luxone-customized',
+      title: 'Sink customized by Luxone',
+      description: 'Luxone will provide and customize the sink',
+      icon: <Wrench size={32} className="text-purple-600" />
+    }
+  ];
+
+  const handleSinkOptionSelect = (option: string) => {
+    updateData({ sinkOption: option });
+  };
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-3">
-          Step 5 (of 9) - Design Options
+          Step 5 (of 8) - Design Options
         </h2>
         <p className="text-lg text-gray-600">
-          Select additional design features and options for your worktop.
+          Choose your sink option for the project.
         </p>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Custom Edge */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Custom Edge Required
-            </label>
-            <select
-              value={data.customEdge}
-              onChange={(e) => updateData({ customEdge: e.target.value as 'YES' | 'NO' })}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        <h3 className="text-xl font-semibold text-gray-900 mb-6">
+          Select Sink Option
+        </h3>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {sinkOptions.map((option) => (
+            <div
+              key={option.id}
+              onClick={() => handleSinkOptionSelect(option.id)}
+              className={`border-2 rounded-lg p-6 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                data.sinkOption === option.id
+                  ? 'border-blue-500 bg-blue-50 shadow-md'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
             >
-              <option value="">Select Option</option>
-              <option value="YES">YES</option>
-              <option value="NO">NO</option>
-            </select>
-          </div>
-
-          {/* Sink Cut Out */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sink Cut Out
-            </label>
-            <select
-              value={data.sinkCutOut}
-              onChange={(e) => updateData({ sinkCutOut: parseInt(e.target.value) as 0 | 1 | 2 })}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select Number</option>
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-
-          {/* Hob Cut Out */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Hob Cut Out
-            </label>
-            <select
-              value={data.hobCutOut}
-              onChange={(e) => updateData({ hobCutOut: parseInt(e.target.value) as 0 | 1 | 2 })}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select Number</option>
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
-          </div>
-
-          {/* Under Mounted Sink */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Under Mounted Sink
-            </label>
-            <select
-              value={data.underMountedSink}
-              onChange={(e) => updateData({ underMountedSink: e.target.value as 'YES' | 'NO' })}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select Option</option>
-              <option value="YES">YES</option>
-              <option value="NO">NO</option>
-            </select>
-          </div>
-
-          {/* Drain Grooves */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Drain Grooves
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={data.drainGrooves || ''}
-              onChange={(e) => updateData({ drainGrooves: e.target.value })}
-              placeholder="Number of sets"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          {/* Tap Holes */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tap Holes
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={data.tapHoles || ''}
-              onChange={(e) => updateData({ tapHoles: e.target.value })}
-              placeholder="Number of holes"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          {/* Steel Frame */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Steel Frame
-            </label>
-            <select
-              value={data.steelFrame}
-              onChange={(e) => updateData({ steelFrame: e.target.value as 'YES' | 'NO' })}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select Option</option>
-              <option value="YES">YES</option>
-              <option value="NO">NO</option>
-            </select>
-          </div>
-
-          {/* Additional Cut Outs */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Additional Cut Outs
-            </label>
-            <input
-              type="text"
-              value={data.cutOuts}
-              onChange={(e) => updateData({ cutOuts: e.target.value })}
-              placeholder="Special shaped cut-outs"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          {/* Upstands */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Upstands (length in meters)
-            </label>
-            <input
-              type="text"
-              value={data.upstands}
-              onChange={(e) => updateData({ upstands: e.target.value })}
-              placeholder="e.g., 3m"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="flex-shrink-0">{option.icon}</div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    {option.title}
+                  </h4>
+                  <p className="text-gray-600 text-sm">
+                    {option.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+
+        {data.sinkOption && (
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <p className="text-green-800 font-medium">
+              ✓ Sink option selected: {
+                data.sinkOption === 'client-provided' 
+                  ? 'Sink provided by Client' 
+                  : 'Sink customized by Luxone'
+              }
+            </p>
+          </div>
+        )}
       </div>
 
-      <NavigationButtons />
+      <NavigationButtons
+        isNextDisabled={!data.sinkOption}
+      />
     </div>
   );
 };

@@ -61,4 +61,14 @@ export interface AdminSettings {
   formFields: FormField[];
   pdfTemplates: PDFTemplate[];
   activePdfTemplate: string;
+  costRules?: CostRule[];
+}
+export interface CostRule {
+  id: string;
+  name: string;
+  category: 'material' | 'fabrication' | 'installation' | 'addon' | 'delivery' | 'business';
+  type: 'fixed' | 'per_sqm' | 'per_piece' | 'percentage';
+  value: number;
+  description: string;
+  isActive: boolean;
 }

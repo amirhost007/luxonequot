@@ -35,7 +35,7 @@ const Step6Timeline: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-3">
-          Step 6 (of 9) - Project Timeline
+          Step 6 (of 8) - Project Timeline
         </h2>
         <p className="text-lg text-gray-600">
           Tell us how quickly you need your worktops installed.
@@ -43,7 +43,7 @@ const Step6Timeline: React.FC = () => {
       </div>
 
       <div className="space-y-4 mb-8">
-<div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-3">
           {timelineOptions.map((option) => (
             <div
               key={option.id}

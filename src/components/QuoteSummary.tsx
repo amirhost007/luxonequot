@@ -141,10 +141,10 @@ I'd like to discuss my project requirements and proceed with the next steps.`;
   };
 
   const getSinkCount = () => {
-    return (data.sinkCutOut || 0) + (data.sinkOption && data.sinkOption !== 'no-sink' && data.sinkOption !== 'own-sink' ? 1 : 0);
+    return data.sinkOption === 'luxone-customized' ? 1 : 0;
   };
 
-  const pricing = calculatePricing(data, settings.pricePerSqft);
+  const pricing = calculatePricing(data, settings.pricePerSqft, settings.costRules);
   const usdPrice = pricing.grandTotal / (settings.aedToUsdRate || 3.67);
 
   return (

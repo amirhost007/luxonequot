@@ -9,8 +9,7 @@ import Step3WorktopLayout from './components/steps/Step3WorktopLayout';
 import Step4WorktopSizes from './components/steps/Step4WorktopSizes';
 import Step5DesignOptions from './components/steps/Step5DesignOptions';
 import Step6Timeline from './components/steps/Step6Timeline';
-import Step7SinkOptions from './components/steps/Step7SinkOptions';
-import Step8ProjectType from './components/steps/Step8ProjectType';
+import Step7ProjectType from './components/steps/Step8ProjectType';
 import Step9ContactInfo from './components/steps/Step9ContactInfo';
 import QuoteSummary from './components/QuoteSummary';
 import AdminPanel from './components/admin/AdminPanel';
@@ -38,10 +37,8 @@ const AppContent: React.FC = () => {
       case 6:
         return <Step6Timeline />;
       case 7:
-        return <Step7SinkOptions />;
+        return <Step7ProjectType />;
       case 8:
-        return <Step8ProjectType />;
-      case 9:
         return <Step9ContactInfo />;
       default:
         return <Step1ScopeOfWork />;

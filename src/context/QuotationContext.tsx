@@ -27,6 +27,9 @@ const initialData: QuotationData = {
   contactNumber: '',
   location: '',
   additionalComments: '',
+  designerName: '',
+  designerContact: '',
+  designerEmail: '',
 };
 
 const QuotationContext = createContext<QuotationContextType | undefined>(undefined);
@@ -36,7 +39,7 @@ export const QuotationProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [currentStep, setCurrentStep] = useState(1);
   const [isQuoteSubmitted, setIsQuoteSubmitted] = useState(false);
   const [quoteId, setQuoteId] = useState('');
-  const totalSteps = 9;
+  const totalSteps = 8;
   const { addQuote, settings } = useAdmin();
 
   const updateData = (updates: Partial<QuotationData>) => {

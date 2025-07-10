@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuotation } from '../../context/QuotationContext';
 import NavigationButtons from '../common/NavigationButtons';
 
-const Step8ProjectType: React.FC = () => {
+const Step7ProjectType: React.FC = () => {
   const { data, updateData } = useQuotation();
 
   const projectTypes = [
@@ -28,7 +28,7 @@ const Step8ProjectType: React.FC = () => {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-3">
-          Step 8 (of 9) - Project Type & Application
+          Step 7 (of 8) - Project Type & Application
         </h2>
         <p className="text-lg text-gray-600">
           Help us understand your specific project requirements.
@@ -60,4 +60,4 @@ const Step8ProjectType: React.FC = () => {
   );
 };
 
-export default Step8ProjectType;
+export default Step7ProjectType;
