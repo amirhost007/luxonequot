@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { useQuotation } from '../../context/QuotationContext';
 import NavigationButtons from '../common/NavigationButtons';
 import FileUpload from '../common/FileUpload';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Plus } from 'lucide-react';
 
 const Step4WorktopSizes: React.FC = () => {
   const { data, updateData } = useQuotation();
-  const [expandedPieces, setExpandedPieces] = useState<{ [key: string]: boolean }>({
-    A: true // Start with first piece expanded
-  });
-
-  const pieces = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const [piecesList, setPiecesList] = useState<string[]>(['A', 'B', 'C', 'D', 'E', 'F']);
+  const [expandedPieces, setExpandedPieces] = useState<{ [key: string]: boolean }>({ A: true });
 
   const handlePieceChange = (piece: string, field: string, value: string) => {
     const updatedPieces = {
@@ -35,7 +32,6 @@ const Step4WorktopSizes: React.FC = () => {
   };
 
   const isNextDisabled = () => {
-    // Check if at least one piece has all dimensions filled
     return !Object.values(data.pieces).some(piece => 
       piece && piece.length && piece.width && piece.thickness
     );
@@ -44,6 +40,49 @@ const Step4WorktopSizes: React.FC = () => {
   const isPieceComplete = (piece: string) => {
     const pieceData = data.pieces[piece];
     return pieceData && pieceData.length && pieceData.width && pieceData.thickness;
+  };
+
+  const getNextPieceLabel = () => {
+    // Convert last label to next alphabet (after Z goes to AA, AB, etc.)
+    const last = piecesList[piecesList.length - 1];
+    let next = '';
+    let carry = true;
+
+    for (let i = last.length - 1; i >= 0; i--) {
+      if (carry) {
+        const char = last[i];
+        if (char === 'Z') {
+          next = 'A' + next;
+          carry = true;
+        } else {
+          next = String.fromCharCode(char.charCodeAt(0) + 1) + next;
+          carry = false;
+        }
+      } else {
+        next = last[i] + next;
+      }
+    }
+
+    if (carry) next = 'A' + next;
+
+    return next;
+  };
+
+  const handleAddPiece = () => {
+    const newPiece = getNextPieceLabel();
+    setPiecesList(prev => [...prev, newPiece]);
+
+    setExpandedPieces(prev => ({
+      ...prev,
+      [newPiece]: true
+    }));
+
+    updateData({
+      pieces: {
+        ...data.pieces,
+        [newPiece]: { length: '', width: '', thickness: '' }
+      }
+    });
   };
 
   return (
@@ -58,14 +97,13 @@ const Step4WorktopSizes: React.FC = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Dimensions Input - Accordion Style */}
         <div className="bg-gray-50 rounded-lg p-6">
           <h3 className="text-xl font-semibold text-gray-900 mb-6">
             Worktop Dimensions
           </h3>
           
           <div className="space-y-3">
-            {pieces.map((piece) => (
+            {piecesList.map((piece) => (
               <div key={piece} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <button
                   onClick={() => togglePiece(piece)}
@@ -87,53 +125,36 @@ const Step4WorktopSizes: React.FC = () => {
                     <ChevronDown size={20} className="text-gray-500" />
                   )}
                 </button>
-                
+
                 {expandedPieces[piece] && (
                   <div className="px-4 pb-4 border-t border-gray-100">
                     <div className="grid md:grid-cols-3 gap-4 mt-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Length (mm)
-                        </label>
-                        <input
-                          type="text"
-                          value={data.pieces[piece]?.length || ''}
-                          onChange={(e) => handlePieceChange(piece, 'length', e.target.value)}
-                          placeholder="e.g., 2400"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Width (mm)
-                        </label>
-                        <input
-                          type="text"
-                          value={data.pieces[piece]?.width || ''}
-                          onChange={(e) => handlePieceChange(piece, 'width', e.target.value)}
-                          placeholder="e.g., 600"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Thickness (mm)
-                        </label>
-                        <input
-                          type="text"
-                          value={data.pieces[piece]?.thickness || ''}
-                          onChange={(e) => handlePieceChange(piece, 'thickness', e.target.value)}
-                          placeholder="e.g., 20"
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
+                      {['length', 'width', 'thickness'].map(field => (
+                        <div key={field}>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            {field.charAt(0).toUpperCase() + field.slice(1)} (mm)
+                          </label>
+                          <input
+                            type="text"
+                            value={data.pieces[piece]?.[field] || ''}
+                            onChange={(e) => handlePieceChange(piece, field, e.target.value)}
+                            placeholder={`e.g., ${field === 'length' ? '2400' : field === 'width' ? '600' : '20'}`}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
               </div>
             ))}
+
+            <button
+              onClick={handleAddPiece}
+              className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition"
+            >
+              <Plus size={18} className="mr-2" /> Add Another Piece
+            </button>
           </div>
         </div>
 
@@ -145,7 +166,6 @@ const Step4WorktopSizes: React.FC = () => {
           <p className="text-gray-600 mb-4">
             You can upload a plan, sketch, or photo for reference to help us better understand your requirements.
           </p>
-          
           <FileUpload
             onFileSelect={handleFileSelect}
             selectedFile={data.planSketch || null}
@@ -154,9 +174,7 @@ const Step4WorktopSizes: React.FC = () => {
         </div>
       </div>
 
-      <NavigationButtons
-        isNextDisabled={isNextDisabled()}
-      />
+      <NavigationButtons isNextDisabled={isNextDisabled()} />
     </div>
   );
 };
