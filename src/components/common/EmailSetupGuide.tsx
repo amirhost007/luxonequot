@@ -58,6 +58,49 @@ Best regards,
 Luxone Team
 www.theluxone.com
   `;
+  const adminTemplate = `Subject: New Quote Request - {{quote_id}} 
+
+🔔 NEW QUOTATION REQUEST RECEIVED
+
+Quote ID: {{quote_id}}
+Date: {{date}}
+
+👤 CUSTOMER INFORMATION:
+• Name: {{customer_name}}
+• Email: {{customer_email}}
+• Phone: {{customer_phone}}
+• Location: {{customer_location}}
+
+🏗️ PROJECT DETAILS:
+• Service Level: {{service_level}}
+• Material: {{material_info}}
+• Total Amount: {{total_amount}} AED
+
+📝 MESSAGE:
+{{message}}
+
+⚡ ACTION REQUIRED:
+Please review this quotation request and follow up with the customer within 24 hours.
+
+---
+Luxone Quotation System
+Automated Notification`;
+
+  const customerTemplate = `Subject: Your Luxone Quotation - {{quote_id}}
+
+Dear {{customer_name}},
+
+Thank you for your interest in Luxone premium worktop solutions!
+
+📋 YOUR QUOTATION DETAILS:
+Quote ID: {{quote_id}}
+Estimated Investment: {{total_amount}} AED
+
+{{message}}
+
+Best regards,
+Luxone Team
+www.theluxone.com`;
 
   const steps = [
     {
