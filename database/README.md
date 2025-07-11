@@ -1,7 +1,7 @@
-# Luxone Quotation System Database
+# Luxone Quotation System Database - Updated Schema
 
 ## 📋 Overview
-Complete SQL database structure for the Luxone Quotation System. This database is designed to work seamlessly with phpMyAdmin and localhost MySQL installations.
+Complete SQL database structure for the Luxone Quotation System with the new 8-step quotation flow, designer contact information, and comprehensive admin cost management.
 
 ## 🚀 Quick Setup
 
@@ -14,7 +14,7 @@ Complete SQL database structure for the Luxone Quotation System. This database i
 ### 2. Database Created
 - **Database Name**: `luxone_quotation_system`
 - **Character Set**: `utf8mb4_unicode_ci`
-- **Tables**: 15 core tables + views and procedures
+- **Tables**: 12 core tables + views and procedures
 
 ## 📊 Database Structure
 
@@ -31,91 +31,150 @@ Complete SQL database structure for the Luxone Quotation System. This database i
 - Pricing configuration
 - WhatsApp numbers
 
-#### 3. **quotations**
-- Main quote records
-- Customer information
-- Quote status tracking
-- JSON data storage
+#### 3. **quotations** (Updated for 8 steps)
+- Main quote records with new structure
+- **NEW**: Designer contact fields
+- **UPDATED**: Simplified sink options
+- **REMOVED**: Detailed sink configurations
+- JSON data storage for complex fields
 
 #### 4. **quotation_pieces**
-- Worktop piece dimensions
-- Area calculations
+- Worktop piece dimensions (A-F)
+- Area calculations (auto-calculated)
 - Linked to main quotes
 
-#### 5. **form_fields**
-- Dynamic form configuration
+#### 5. **cost_rules** (NEW - Admin Configurable)
+- Dynamic cost management
+- Categories: material, fabrication, installation, addon, delivery, business
+- Types: fixed, per_sqm, per_piece, percentage
+- Enable/disable individual rules
+
+#### 6. **form_fields**
+- Dynamic form configuration for 8 steps
 - Field types and validation
 - Step-by-step organization
 
-#### 6. **pdf_templates**
+#### 7. **pdf_templates**
 - PDF template management
-- Color schemes
-- Layout options
+- Color schemes and layouts
+- Section visibility controls
 
-#### 7. **material_options**
+#### 8. **material_options**
 - Quartz and porcelain options
 - Pricing per material
 - Availability status
 
-#### 8. **sink_options**
-- Sink categories and models
-- Pricing information
-- Bowl configurations
-
-#### 9. **pricing_rules**
-- Dynamic pricing logic
-- Addon calculations
-- Business rules
-
-#### 10. **quotation_files**
+#### 9. **quotation_files**
 - File upload management
 - Slab photos and plans
-- PDF storage
+- PDF storage with metadata
 
-### Additional Tables
-- `activity_logs` - Audit trail
-- `email_templates` - Email automation
-- `system_settings` - Configuration
-- `quotation_summary` (View) - Quick overview
-- `monthly_stats` (View) - Analytics
+#### 10. **activity_logs**
+- Audit trail for all changes
+- User action tracking
+- Data change history
 
-## 🔧 Features
+#### 11. **email_templates**
+- Email automation templates
+- Variable substitution
+- Admin and customer templates
 
-### ✅ **Complete Data Management**
-- Customer quotes and details
-- Material and sink options
-- Pricing calculations
-- File uploads
-- Admin settings
+#### 12. **system_settings**
+- System configuration
+- Feature toggles
+- Performance settings
 
-### ✅ **Dynamic Configuration**
-- Form fields can be added/modified
-- PDF templates customizable
-- Pricing rules adjustable
-- Material options manageable
+## 🆕 New Features in Updated Schema
 
-### ✅ **Security & Audit**
-- User authentication
-- Activity logging
-- Data validation
-- Secure file storage
+### ✅ **8-Step Quotation Flow**
+- **Step 1**: Scope of Work (fabrication, delivery, installation)
+- **Step 2**: Material Options (luxone, yourself, luxone-others)
+- **Step 3**: Worktop Layout (U+Island, L-Shape, etc.)
+- **Step 4**: Worktop Dimensions (pieces A-F)
+- **Step 5**: Design Options (simplified sink choices)
+- **Step 6**: Timeline (ASAP, 3-6 weeks, 6+ weeks)
+- **Step 7**: Project Type (kitchen, bathroom, commercial)
+- **Step 8**: Contact Information (client + designer details)
 
-### ✅ **Analytics & Reporting**
-- Quote statistics
-- Monthly summaries
-- Customer insights
-- Performance metrics
+### ✅ **Designer Contact Integration**
+```sql
+-- New fields in quotations table
+designer_name VARCHAR(100) NOT NULL,
+designer_contact VARCHAR(20) NOT NULL,
+designer_email VARCHAR(100) NOT NULL
+```
+
+### ✅ **Comprehensive Cost Management**
+```sql
+-- Cost rules with categories and types
+CREATE TABLE cost_rules (
+    id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category ENUM('material', 'fabrication', 'installation', 'addon', 'delivery', 'business'),
+    type ENUM('fixed', 'per_sqm', 'per_piece', 'percentage'),
+    value DECIMAL(10,2) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE
+);
+```
+
+### ✅ **Simplified Sink Options**
+- **Option 1**: `client-provided` - Sink provided by Client
+- **Option 2**: `luxone-customized` - Sink customized by Luxone
+- **REMOVED**: Complex sink selection step
+
+### ✅ **Enhanced File Management**
+```sql
+CREATE TABLE quotation_files (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    quotation_id INT NOT NULL,
+    file_type ENUM('slab_photo', 'plan_sketch', 'pdf_quote'),
+    original_filename VARCHAR(255),
+    stored_filename VARCHAR(255),
+    file_path VARCHAR(500),
+    file_size INT,
+    mime_type VARCHAR(100)
+);
+```
+
+## 🔧 Default Cost Rules
+
+The system includes these configurable cost rules:
+
+| Rule ID | Name | Category | Type | Default Value |
+|---------|------|----------|------|---------------|
+| `material_base` | Base Material Cost | material | per_sqm | 150.00 AED |
+| `cutting` | Cutting Cost | fabrication | per_sqm | 20.00 AED |
+| `top_polishing` | Top Polishing | fabrication | per_sqm | 50.00 AED |
+| `edge_polishing` | Edge Polishing | fabrication | per_sqm | 30.00 AED |
+| `installation` | Installation Cost | installation | per_sqm | 140.00 AED |
+| `sink_luxone` | Luxone Sink Cost | addon | fixed | 500.00 AED |
+| `delivery_dubai` | Dubai Delivery | delivery | fixed | 500.00 AED |
+| `delivery_uae` | UAE Delivery | delivery | fixed | 800.00 AED |
+| `margin` | Business Margin | business | percentage | 20% |
+| `vat` | VAT | business | percentage | 5% |
 
 ## 📈 Sample Data Included
 
-The database comes with:
-- **3 sample quotations** with different configurations
-- **Default form fields** for all 9 steps
-- **Material options** (Quartz & Porcelain)
-- **Sink options** (Stainless Steel & Corian)
-- **Pricing rules** for calculations
-- **PDF template** (default)
-- **Admin user** (admin/luxone2025)
+### ✅ **3 Sample Quotations**
+- Different service levels and materials
+- Complete with pieces and designer info
+- Various statuses (pending, reviewed, quoted)
+
+### ✅ **Default Form Fields**
+- All 8 steps configured
+- Proper field types and validation
+- Display order and visibility settings
+
+### ✅ **Material Options**
+- **Quartz**: 10 color options with pricing
+- **Porcelain**: 5 color options with pricing
+- Availability flags
+
+### ✅ **Admin Configuration**
+- Default admin user (admin/luxone2025)
+- Company settings with UAE contact info
+- PDF template with Luxone branding
+- Email templates for notifications
 
 ## 🔍 Key Views
 
@@ -123,71 +182,112 @@ The database comes with:
 ```sql
 SELECT * FROM quotation_summary;
 ```
-Quick overview of all quotes with piece counts and total areas.
+Complete overview with piece counts, total areas, and designer info.
 
 ### monthly_stats
 ```sql
 SELECT * FROM monthly_stats;
 ```
-Monthly statistics for quotes and revenue.
+Monthly statistics for quotes and revenue analysis.
 
 ## 🛠 Stored Procedures
 
 ### GenerateQuoteId()
 ```sql
 CALL GenerateQuoteId(@new_id);
-SELECT @new_id;
+SELECT @new_id; -- Returns: LUX-2025-01-00001
 ```
-Generates unique quote IDs with format: LUX-YYYY-MM-XXXXX
 
 ### CalculateQuotePricing()
 ```sql
-CALL CalculateQuotePricing('LUX-2025-01-ABC12', @total);
-SELECT @total;
+CALL CalculateQuotePricing('LUX-2025-01-00001', @total);
+SELECT @total; -- Returns calculated total with all costs
 ```
-Calculates total pricing for a quote including all addons.
-
-## 📱 Integration Ready
-
-This database structure is designed to integrate with:
-- **React Frontend** (current system)
-- **PHP Backend** (for production)
-- **REST APIs** (for mobile apps)
-- **Reporting Tools** (for analytics)
 
 ## 🔐 Security Features
 
+### ✅ **Data Protection**
 - Password hashing for admin users
 - SQL injection prevention
-- File upload validation
-- Activity logging
-- Role-based permissions
+- Input validation and sanitization
+- File upload security
+
+### ✅ **Audit Trail**
+- All changes logged in `activity_logs`
+- User action tracking
+- Data change history
+- Timestamp tracking
+
+### ✅ **Access Control**
+- Role-based admin permissions
+- Session management
+- Secure file storage
 
 ## 📊 Analytics Capabilities
 
-- Quote conversion tracking
-- Revenue analysis
-- Customer behavior insights
+### ✅ **Quote Analytics**
+- Conversion tracking by status
+- Revenue analysis by period
+- Location distribution
 - Material popularity
-- Geographic distribution
+- Designer performance metrics
 
-## 🚀 Production Ready
+### ✅ **Business Intelligence**
+- Monthly trends and patterns
+- Average quote values
+- Service level preferences
+- Timeline analysis
 
-- Optimized indexes for performance
-- Foreign key constraints
-- Data validation triggers
-- Backup-friendly structure
-- Scalable design
+## 🚀 Integration Ready
+
+### ✅ **Frontend Integration**
+- React components mapped to database fields
+- 8-step flow matches table structure
+- Designer fields integrated
+- Cost rules for admin panel
+
+### ✅ **API Ready**
+- RESTful endpoint structure
+- JSON data handling
+- File upload support
+- Pagination and filtering
+
+### ✅ **Reporting Tools**
+- Views for quick reporting
+- Stored procedures for calculations
+- Export-friendly data structure
+- Analytics dashboard support
+
+## 🔄 Migration from Previous Version
+
+### ✅ **Schema Updates**
+- Added designer contact fields
+- Simplified sink options
+- Added cost_rules table
+- Updated form_fields for 8 steps
+- Enhanced file management
+
+### ✅ **Data Migration**
+- Existing quotes preserved
+- New fields with default values
+- Cost rules populated
+- Form fields updated
 
 ## 📞 Support
 
-For database questions or customizations:
-- Review the table structures
-- Check the sample data
-- Examine the stored procedures
-- Test with the provided sample records
+### Database Operations
+- **Backup**: `mysqldump luxone_quotation_system > backup.sql`
+- **Restore**: `mysql luxone_quotation_system < backup.sql`
+- **Optimize**: `OPTIMIZE TABLE quotations, quotation_pieces;`
+
+### Performance Tuning
+- Indexes on frequently queried columns
+- Optimized views for reporting
+- Efficient stored procedures
+- Proper foreign key constraints
 
 ---
 
-**🎯 Ready to use with phpMyAdmin!**
-Simply import the SQL file and start managing your quotation system with a complete database backend.
+**🎯 Production-ready database with complete 8-step quotation flow!**
+
+The updated schema supports the new simplified quotation process with designer integration and comprehensive admin cost management.
